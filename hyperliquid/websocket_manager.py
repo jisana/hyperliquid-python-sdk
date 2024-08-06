@@ -14,6 +14,8 @@ ActiveSubscription = NamedTuple("ActiveSubscription", [("callback", Callable[[An
 def subscription_to_identifier(subscription: Subscription) -> str:
     if subscription["type"] == "allMids":
         return "allMids"
+    elif subscription["type"] == "activeAssetCtx":
+        return f'activeAssetCtx:{subscription["coin"].lower()}'
     elif subscription["type"] == "l2Book":
         return f'l2Book:{subscription["coin"].lower()}'
     elif subscription["type"] == "trades":
@@ -29,6 +31,8 @@ def ws_msg_to_identifier(ws_msg: WsMsg) -> Optional[str]:
         return "allMids"
     elif ws_msg["channel"] == "l2Book":
         return f'l2Book:{ws_msg["data"]["coin"].lower()}'
+    elif ws_msg["channel"] == "activeAssetCtx":
+        return f'activeAssetCtx:{ws_msg["data"]["coin"].lower()}'
     elif ws_msg["channel"] == "trades":
         trades = ws_msg["data"]
         if len(trades) == 0:
